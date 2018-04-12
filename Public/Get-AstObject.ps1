@@ -19,15 +19,24 @@ function Get-AstObject {
 	    [ValidateNotNullOrEmpty()]
 	    [string]$ScriptPath,
 	
-		[Parameter(Mandatory)]
+	    [Parameter(Mandatory)]
 	    [ValidateNotNullOrEmpty()]
-	    [string]$Type
+	    [string]$Type,
+
+            [Parameter()]
+            [switch]$ExactType
 	)
 	process {
 	    try {
 			[System.Type]$FullType = "System.Management.Automation.Language.$Type"
+			$astTypeFilter = if($ExactType.IsPresent){
+                            { $args[0].GetType() -eq $FullType }
+                        }
+                        else {
+                            { $args[0] -is $FullType}
+                        }
 			$ast = [System.Management.Automation.Language.Parser]::ParseFile( $ScriptPath, [ref]$null, [ref]$null )
-			$ast.FindAll( { $args[0] -is $FullType }, $true )  |
+			$ast.FindAll( $astTypeFilter, $true )  |
 				ForEach-Object {
 					$_
 				}
