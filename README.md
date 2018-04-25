@@ -6,3 +6,4 @@ AstHelper is a module that aims to make working with Abstract Syntax Trees (ASTs
 - Write tests
 - Add more features
     - Figure out which features need to be added
+- A real release pipeline
