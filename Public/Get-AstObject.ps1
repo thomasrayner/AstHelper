@@ -35,7 +35,8 @@ function Get-AstObject {
                         else {
                             { $args[0] -is $FullType}
                         }
-			$ast = [System.Management.Automation.Language.Parser]::ParseFile( $ScriptPath, [ref]$null, [ref]$null )
+			$FullPath = (Resolve-Path -Path $ScriptPath).ProviderPath
+			$ast = [System.Management.Automation.Language.Parser]::ParseFile( $FullPath, [ref]$null, [ref]$null )
 			$ast.FindAll( $astTypeFilter, $true )  |
 				ForEach-Object {
 					$_
