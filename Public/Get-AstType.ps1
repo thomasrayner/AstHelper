@@ -21,7 +21,8 @@ function Get-AstType {
 	)
 	process {
 	    try {
-			$ast = [System.Management.Automation.Language.Parser]::ParseFile( $ScriptPath, [ref]$null, [ref]$null )
+			$FullPath = (Resolve-Path -Path $ScriptPath).ProviderPath
+			$ast = [System.Management.Automation.Language.Parser]::ParseFile( $FullPath, [ref]$null, [ref]$null )
 			$ast.FindAll( { $args[0] -ne $null }, $true )  |
 				ForEach-Object {
 					$_.GetType()
